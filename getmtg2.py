@@ -1,0 +1,32 @@
+import requests
+import requests_cache
+import base_parser
+from bs4 import BeautifulSoup
+
+requests_cache.install_cache('meetings')
+
+class SingleMeeting():
+    def __init__(self, base_url, meeting_id):
+        self.base_url = base_url
+        self.meeting_id = meeting_id
+        self.get_meeting()
+        self.parse_linkeddoc()
+
+    def get_meeting(self):
+        url = "{}/GetMeeting?lMeetingId={}".format(
+            self.base_url,
+            self.meeting_id
+        )
+        self.soup = BeautifulSoup(requests.get(url).text, "html.parser")
+        return self.soup
+
+    def parse_linkeddoc(self):
+        self.docs = {}
+        for info in self.soup.findAll('linkeddoc'):
+            self.docs[info.itemnum.text] = info
+
+
+if __name__ == "__main__":
+    s = SingleMeeting("http://democracy.devon.gov.uk/mgWebService.asmx", 206)
+    //for item in s.soup.findAll('agendaitem'):
+    print(s.docs)
