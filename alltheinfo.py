@@ -10,7 +10,6 @@ class SingleMeeting():
         self.base_url = base_url
         self.meeting_id = meeting_id
         self.get_meeting()
-        self.parse_linkeddoc()
 
     def get_meeting(self):
         url = "{}/GetMeeting?lMeetingId={}".format(
@@ -18,17 +17,7 @@ class SingleMeeting():
             self.meeting_id
         )
         self.soup = BeautifulSoup(requests.get(url).text, "html.parser")
-        return self.soup
-
-    def parse_linkeddoc(self):
-        self.docs = {}
-        for info in self.soup.findAll('linkeddoc'):
-            self.docs[info.itemnum.text] = info
-
-
+        pretty print (self.soup)
+        
 if __name__ == "__main__":
     s = SingleMeeting("http://democracy.devon.gov.uk/mgWebService.asmx", 206)
-    for item in s.soup.findAll('agendaitem'):
-        print(item.find('agendaitemtitle').text)
-        print(item.find('minutesnonemptyhtmlbody').get_text)
-        
