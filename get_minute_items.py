@@ -17,7 +17,10 @@ class SingleMeeting():
             self.meeting_id
         )
         self.soup = BeautifulSoup(requests.get(url).text, "html.parser")
-        print (self.soup)
-        
+        return self.soup
+
+
 if __name__ == "__main__":
     s = SingleMeeting("http://democracy.devon.gov.uk/mgWebService.asmx", 206)
+    for item in s.soup.findAll('agendaitem'):
+        print(item.find('agendaitemtitle').text)
